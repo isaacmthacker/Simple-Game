@@ -23,6 +23,8 @@ ArrayList<Bar> bars = new ArrayList<Bar>();
 
 ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 
+ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+
 void setup() {
   background(255);
   size(800, 500);
@@ -30,6 +32,11 @@ void setup() {
   bars.add(new Bar(100, 100, 200));
   bars.add(new Bar(200, 200, 100));
   bars.add(new Bar(300, 150, 500));
+  bars.add(new Bar(400, 100, 300));
+  bars.add(new Bar(300, 400, 300));
+  bars.add(new Bar(100, 450, 100));
+  bars.add(new Bar(200, 350, 500));
+  bars.add(new Bar(100, 300, 250));
 }
 
 void draw() {
@@ -38,8 +45,19 @@ void draw() {
   player.draw();
   drawBullets();
   drawBars();
+  moveEnemies();
 
-
+  float rand = random(0, 100);
+  boolean leftSide = true;
+  float pos = 0;
+  if (rand < 0.25 || rand > 99.75) {
+    if (rand > 50) {
+      leftSide = false;
+      pos = w;
+    }
+    enemies.add(new Enemy(pos, random(0, h), leftSide));
+    println(enemies);
+  }
 
 
 
@@ -104,10 +122,40 @@ void drawBars() {
   }
 }
 void drawBullets() {
-  for (Bullet b : bullets) {
-    b.move();
-    b.draw();
+  for (int i = 0; i < bullets.size(); ++i) {
+    if (outOfFrame(bullets.get(i))) {
+      bullets.remove(i);
+    } else {
+      Bullet b = bullets.get(i);
+      b.move();
+      b.draw();
+    }
   }
+}
+
+void moveEnemies() {
+  for (int i = 0; i < enemies.size(); ++i) {
+    Enemy e = enemies.get(i);
+    boolean intersectBul = false;
+    for (Bullet b : bullets) {
+      if (e.intersectBullet(b)) {
+        enemies.remove(i);
+        intersectBul = true;
+        break;
+      }
+    }
+    if (!intersectBul) {
+      e.move();
+      e.draw();
+    }
+  }
+}
+
+boolean outOfFrame(Bullet b) {
+  if (b.x > w || b.x < 0 || b.y < 0 || b.y > h) {
+    return true;
+  }
+  return false;
 }
 
 

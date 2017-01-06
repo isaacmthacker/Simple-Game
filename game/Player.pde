@@ -27,7 +27,9 @@ class Player {
   }
 
   void draw() {
+    noFill();
     ellipse(x, y, r, r);
+    fill(0);
     ellipse(x, y, 1, 1);
   }
 }

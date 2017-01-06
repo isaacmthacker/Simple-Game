@@ -2,6 +2,7 @@ class Bullet {
   float velx = 5.0;
   float x;
   float y;
+  float r = 20;
   Bullet(float xx, float yy, boolean left) {
     x = xx;
     y = yy;
@@ -15,6 +16,6 @@ class Bullet {
   }
   void draw() {
     fill(255, 0, 0);
-    ellipse(x, y, 5, 5);
+    ellipse(x, y, r, r);
   }
 }
